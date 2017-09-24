@@ -6,6 +6,7 @@ import com.localhost.db.Database;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
+import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -16,20 +17,21 @@ public class Main {
     private JTextField idField = new JTextField("");
     private JPasswordField pwField = new JPasswordField("");
     private GridBagLayout layout = new GridBagLayout();
-    private Font font = new Font("Noto Sans CJK KR Regular", Font.PLAIN, 20);
 
     private static boolean useBcrypt = true;
-
     private static Database database;
 
-    private void createFrame() {
+    private void createFrame() throws Exception {
+        System.setProperty("awt.useSystemAAFontSettings","on");
+        System.setProperty("swing.aatext", "true");
+
+        InputStream stream = Main.class.getResourceAsStream("notosans.ttf");
+        Font font = Font.createFont(Font.TRUETYPE_FONT, stream);
+        font = font.deriveFont(24f);
+
         database = new Database("jdbc:mysql://localhost/sql_injection_demo", "root", "devonnuri");
 
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
         GridBagConstraints con = new GridBagConstraints();
 
@@ -126,7 +128,7 @@ public class Main {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> database.close()));
 
         Main main = new Main();
