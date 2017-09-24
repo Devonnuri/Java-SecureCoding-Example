@@ -1,10 +1,9 @@
 package com.localhost.db;
 
-import javax.xml.transform.Result;
 import java.sql.*;
 
 public class Database {
-    Connection conn;
+    private Connection conn;
     public Database(String url, String username, String password) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
